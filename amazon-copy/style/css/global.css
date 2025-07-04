@@ -1,0 +1,31 @@
+html {
+    scroll-behavior: smooth;
+}
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+:root {
+    --PRIMARY-TEXT-COLOR: rgb(33, 33, 33);
+    --SECONDARY-TEXT-COLOR: white;
+}
+
+body {
+  font-family: "Roboto", Arial;
+  
+  color: var(--PRIMARY-TEXT-COLOR);
+}
+
+input, select, button {
+  font-family: inherit;
+
+  color: inherit;
+}
+
+select:focus, input:focus {
+    outline: 2px solid rgb(255, 153, 0);
+}
