@@ -1,0 +1,45 @@
+.nav__bar {
+  grid-area: nav;
+
+  position: fixed;
+  top: 60px;
+  left: 0;
+  bottom: 0;
+
+  display: flex;
+  flex-flow: column nowrap;
+
+  width: 80px;
+}
+
+.nav__box {
+  flex-shrink: 0;
+
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+
+  border-radius: 10px;
+  height: 80px;
+}
+
+.nav__box:hover {
+background-color: var(--LIGHT-HIGHLIGHTER-COLOR);
+}
+
+.nav__bar a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.nav__icon {
+  max-height: 27px;
+  width: auto;
+}
+
+.nav__text {
+  font-size: 0.7rem;
+  font-weight: 500;
+}

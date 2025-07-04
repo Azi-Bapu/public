@@ -1,0 +1,41 @@
+/*VARIABLES*/
+:root {
+  /*COLOR*/
+  --DARK-THEME-BACKGROUND-COLOR: rgb(33, 33, 33);
+  --DARK-THEME-TEXT-COLOR: white; 
+  --LIGHT-THEME-BACKGROUND-COLOR:  white;
+  --LIGHT-THEME-TEXT-COLOR: rgb(33, 33, 33);
+  --DARK-HIGHLIGHTER-COLOR: rgb(115, 115, 115);
+  --LIGHT-HIGHLIGHTER-COLOR: gainsboro;
+}
+
+.icon__frame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: none;
+  border-radius: 50%;
+  padding: 7.5px;
+}
+
+.icon__frame:not(:hover) {
+  background-color: transparent;
+}
+
+.icon {
+  display: block;
+
+  height: 25px;
+  width: auto;  
+}
+
+.profile__container {
+  padding: 0;
+  height: 35px;
+}
+
+.profile__icon {
+  height: 100%;
+  width: auto;
+}

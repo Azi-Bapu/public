@@ -1,0 +1,140 @@
+/*HEADER*/
+.header {
+  grid-area: header;
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+
+  margin-inline: 20px;
+  padding-block: 7px;
+  height: 50px;
+
+  /*background-color: aqua;*/
+}
+
+.left__section {
+  flex: 0 1 250px;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: start;
+  align-items: center;
+
+  margin-inline-end: 40px;
+
+  /*background-color: blue;*/
+}
+
+.middle__section {
+  flex: 0 1 650px;
+
+  display: flex;
+  flex-flow: row nowrap;
+
+  margin-inline-end: 40px;
+
+  /*background-color: red;*/
+}
+
+.right__section {
+  flex: 0 0 250px;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  align-items: center;
+
+  /*background-color: green;*/
+}
+
+/*LEFT SECTION*/
+.nav__btn {
+  margin-inline-end: 15px; 
+}
+
+.youtube__logo{
+  background-color: transparent;
+}
+
+.youtube__logo .icon {
+  height: 20px;
+}
+
+/*MIDDLE-SECTION*/
+.before-search-bar {
+  display: none;
+
+  border: none;
+  padding: 8px -5px 8px 17px;
+
+  background-color: transparent;
+}
+
+.search__bar {
+  flex: 1 1 calc(100% - 105px);
+
+  border: 0.5px solid var(--DARK-HIGHLIGHTER-COLOR);
+  border-radius: 20px 0 0 20px;
+  padding: 15px;
+  width: 100%;
+  min-width: 200px;
+
+  font-size: 1rem;
+}
+
+.after-search-bar  {
+  margin-inline-end: 20px;
+  margin-left: -0.5px;
+  border: 0.5px solid var(--DARK-HIGHLIGHTER-COLOR);
+  border-radius: 0 20px 20px 0;
+  padding: 8px 17px;
+
+  background-color: transparent;
+}
+
+.search__bar:active, .search__bar:focus {
+  outline: 1px solid dodgerblue ;
+} 
+
+/*
+.search__bar:active ~ .before-search-bar {
+  display: block;
+  outline: 0.5px solid dodgerblue;
+}
+*/
+
+/*RIGHT-SECTION*/
+
+.right__section .icon__frame {
+  flex-shrink: 0;
+}
+
+.notification {
+  position: relative;
+}
+
+.notification__count {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  height: 0.9rem;
+  width: 0.9rem;
+
+  font-size: 0.5rem;
+  font-weight: 900;
+
+  background-color: rgb(221, 0, 0);
+  color: white;
+}

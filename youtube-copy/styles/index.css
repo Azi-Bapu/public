@@ -1,0 +1,41 @@
+/*RESET*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/*LAYOUT*/
+.page {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  grid-auto-rows: 50px 1fr;
+  grid-template-areas:
+    "header header"
+    "nav body"
+  ;
+
+  background-color: var(--LIGHT-THEME-BACKGROUND-COLOR);
+  color: var(--LIGHT-THEME-TEXT-COLOR);
+}
+
+/*GENERAL*/
+button, a {
+  cursor: pointer;
+}
+
+img {
+  display: block;
+}
+
+
+
+
+/*
+@media (prefers-color-scheme: dark) {
+  .page {
+    background-color: var(--DARK-THEME-BACKGROUND-COLOR);
+    color: var(--DARK-THEME-TEXT-COLOR);
+  }
+}
+*/
