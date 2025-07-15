@@ -1,4 +1,37 @@
-const products = [
+class Product { 
+  #id
+  image
+  name
+  rating
+  priceCents
+  keywords
+  qty
+
+  constructor({id, image, name, rating, priceCents, keywords, qty}){
+    this.#id = id
+    this.image = image
+    this.name = name
+    this.rating = rating
+    this.priceCents = priceCents
+    this.keywords = keywords 
+    this.qty = qty || 1
+  }
+
+  getId(){
+    return  this.#id
+  }
+
+  priceInDollars() {
+    return this.priceCents / 100
+  }
+
+  ratingStarNo(){
+    return this.rating.stars * 10
+  }
+
+}
+
+const productsArray = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
     image: "images/products/athletic-cotton-socks-6-pairs.jpg",
@@ -658,3 +691,9 @@ const products = [
     ]
   }
 ];
+
+export const products =  productsArray.map( (product) => {
+  return new Product(product)
+});
+
+

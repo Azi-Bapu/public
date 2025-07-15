@@ -1,3 +1,8 @@
+/*  
+- Avoid deep nesting of containers
+- Don't size based on dynamic children i.e the size of a parent component shouldn't be determined by the child component
+- 
+*/
 html {
     scroll-behavior: smooth;
 }
@@ -10,7 +15,7 @@ html {
 }
 
 :root {
-    --PRIMARY-TEXT-COLOR: rgb(33, 33, 33);
+    --PRIMARY-TEXT-COLOR: rgb(33, 33, 33); 
     --SECONDARY-TEXT-COLOR: white;
 }
 
@@ -26,6 +31,59 @@ input, select, button {
   color: inherit;
 }
 
-select:focus, input:focus {
-    outline: 2px solid rgb(255, 153, 0);
+select:focus, input:focus, button:focus {
+    outline: 0.13rem solid rgb(255, 153, 0); /*2px*/
+}
+
+select {
+  box-shadow: 0 0.12rem 0.31rem rgba(213, 217, 217, 0.5); /* 0 2px 5px */
+}
+
+a, button {
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: 0.13rem; /*2px*/
+}
+
+a:hover, a:focus {
+  outline: 0.06rem solid white; /*1px*/
+}
+
+.primary__btn {
+  border: 0.06rem solid rgb(252, 210, 0); /* 1px */
+  border-radius: 1.87rem; /* 30px */
+
+  color: rgb(33, 33, 33);
+  background-color: rgb(255, 216, 20);
+  box-shadow: 0 0.12rem 0.31rem rgba(213, 217, 217, 0.5); /* 0 2px 5px */
+}
+
+.primary__btn:active {
+  background: rgb(255, 216, 20);
+  border-color: rgb(252, 210, 0);
+  box-shadow: none;
+}
+
+.primary__btn:hover,.primary__btn:focus  {
+  background-color: rgb(247, 202, 0);
+}
+
+.secondary__btn {
+  border: 0.06rem solid rgb(213, 217, 217); /* 1px */
+  border-radius: 1.87rem; /* 30px */
+
+  color: rgb(33, 33, 33);
+  background-color: white;
+  box-shadow: 0 0.12rem 0.31rem rgba(213, 217, 217, 0.5); /* 0 2px 5px */
+}
+
+.secondary__btn:active {
+  background-color: rgb(237, 253, 255);
+  box-shadow: none;
+}
+
+.secondary__btn:hover,.secondary__btn:focus  {
+  background-color: rgb(247, 250, 250);;
 }

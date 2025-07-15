@@ -1,0 +1,88 @@
+.tracking__page {
+  margin: 1.87rem auto; /* 30px */
+  max-width: 55.12rem; /* 882px */
+  padding-inline: 1rem;
+}
+
+.view-orders__link  {
+  color: rgb(1, 124, 182);
+
+  text-decoration: underline;
+}
+
+.view-orders__link:hover {
+  color: brown;
+}
+
+.arrival-time {
+  margin-block: 1.2em 0.4em; /* 30px 10px */
+
+  font-size: 1.56rem ; /* 25px */
+  font-weight: 700;
+}
+
+.arrival-order {
+  margin-bottom: 0.18rem; /* 3px */
+}
+
+.arrival-image__frame {
+  margin-block: 2.18rem; /* 35px */
+  height: 6.25rem; /* 100px */
+  width: auto;
+}
+
+.arrival-image {
+  max-height: 100%;
+  width: auto;
+}
+
+.arrival__stages {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+
+  margin-bottom: 0.75em; /* 15px */
+
+  font-size: 1.25rem; /* 20px */
+  font-weight: 500;
+}
+
+.current-status {
+  color: rgb(6, 125, 98);
+}
+
+.progress__bar {
+  position: relative;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+
+.progress__bar span {
+  flex: 1 1;
+
+  height: 1.87rem; /* 30px */
+  border: 0.06rem solid rgb(200, 200, 200); /* 1px */
+  border-radius: 1.87rem ; /* 30px */
+}
+
+.left-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 50%;
+
+  background-color: green;
+}
+
+
+
+
+@media screen and (max-width: 35.93em) { /* 575px */
+  .arrival__stages{
+    font-size: 1rem;
+  }
+}
+

@@ -1,0 +1,134 @@
+.order__page {
+  margin: 1.87rem auto; /* 30px */
+  max-width: 55.12rem; /* 882px */
+  padding-inline: 1rem;
+}
+
+.page__title {
+  margin-bottom: 1.87rem; /* 30px */
+}
+
+.order__details {
+  margin-bottom: 3.12rem; /* 50px */
+  border: 0.06rem solid rgb(213, 217, 217);  /* 1px */
+  border-radius: 0.62rem; /* 10px */
+
+}
+
+.date-cost-id {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+
+  padding: 1.5rem;
+  border-radius: 0.62rem 0.62rem 0 0; /* 10px */
+  border-bottom: 0.06rem solid rgb(213, 217, 217);  /* 1px */
+
+  background-color: rgb(240, 242, 242)
+}
+
+.date, .cost, .id {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.cost {
+  flex: 1;
+
+  margin-left: 3.12rem; /* 50px */
+}
+
+.product {
+  display: grid;
+  grid-template-columns: 6.25rem 1fr; /* 100px */
+  gap: 3.12rem; /* 50px */
+  align-items: start;
+
+  margin: 3.12rem  1.5rem; /* 50px */
+  min-height: 7.5rem; /* 120px */
+}
+
+.product__image {
+  height: auto;
+  width: 100%;
+}
+
+.product__info {
+  display: grid;
+  grid-template-columns: 1fr 13.75rem; /* 220px */
+  column-gap: 2rem;
+
+}
+
+.buy-again, .track-package {
+  border-radius: 0.6em; /* 10px */
+  padding: 0.5em;
+
+  font-size: 0.93rem; /* 15px */
+
+  display: grid;
+  place-content: center;
+}
+
+.buy-again {
+  width: 8.75rem; /* 140px */
+}
+
+.order__name {
+  font-weight: 700;
+}
+
+.order__name, .order__time, .order__quantity, .buy-again {
+  margin-bottom: 0.4rem;
+}
+
+
+
+
+@media screen and (max-width: 46.87em){ /* 750px */
+  .product__info  {
+    grid-template-columns: 1fr;
+  }
+
+  .track-package {
+    width: 8.75rem; /* 140px */
+  }
+}
+
+@media screen and (max-width: 35.93em){ /* 575px */
+  
+  .date-cost-id {
+    flex-flow: column nowrap;
+    justify-content: start;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  
+  .date, .cost, .id {
+    flex-flow: row nowrap;
+    justify-content: start;
+    gap: 0.5rem;
+  }
+
+  .cost {
+    margin-left: 0px;
+  }
+
+}
+
+@media screen and (max-width: 28.12rem){ /* 450px */
+  .product {
+    grid-template-columns: 1fr;
+    
+    margin: 0rem  1.5rem;
+    padding-block: 3.12rem; /* 50px */
+  }
+
+  .product:not(:first-child) {
+    border-top: 0.06rem solid rgb(213, 217, 217); /* 1px */
+  }
+
+  .buy-again, .track-package {
+    width: 100%;
+  }
+}
