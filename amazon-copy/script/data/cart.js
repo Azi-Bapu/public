@@ -1,64 +1,70 @@
+import { convertToPercent} from "../utils/utils.js"
+import { getProduct } from "../utils/utils.js"
 import { products } from "./products.js"
 
-export const cart = [{
-    id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-    image: "images/products/athletic-cotton-socks-6-pairs.jpg",
-    name: "Black and Gray Athletic Cotton Socks - 6 Pairs",
-    rating: {
-      stars: 4.5,
-      count: 87
-    },
-    qty: 1,
-    priceCents: 1090,
-    keywords: [
-      "socks",
-      "sports",
-      "apparel"
-    ],
+export const cart = JSON.parse(localStorage.getItem('cart')) || []
 
-    getId(){
-      return  this.id
-    },
+export function addToCart(productId){
+  let productRepeat = false
+  let productToAdd = getProduct(productId)
 
-    priceInDollars() {
-      return this.priceCents / 100
-    },
-
-    ratingStarNo(){
-      return this.rating.stars * 10
+  for(let cartItem of cart){
+    if(cartItem.id === productId){
+      productRepeat = true
+      cartItem.quantity += productToAdd.quantity
+      cartItem.cost = productToAdd.priceCents * cartItem.quantity,
+      cartItem.deliveryOptions[1].cost = convertToPercent(cartItem.cost, 10);
+      cartItem.deliveryOptions[2].cost = convertToPercent(cartItem.cost, 30);
     }
-  },
-];
-
-export function addToCart(button, btnIndex) {
-  let repeatStatus, repeatIdex 
-
-  cart.forEach( (cartItem, cartItemIndex) => {
-    // Compare the IDs of the items in the Cart with the current product-button pair. If true then the product already resides in the Cart
-    if (cartItem.getId() === products[btnIndex].getId()) {
-      repeatIdex = cartItemIndex
-      repeatStatus = true // Assigns true only if the IDs match
-    }
-  });
-  // If repeatStatus is true then only the Cart Quantity increases
-  if(repeatStatus){
-    cart[repeatIdex].qty += 1
-    /* renderCart() */
-    console.log(cart)
-    // Disable button for 500ms to avoid functionality overload
-    button.disabled = true
-    setTimeout( () => {
-      button.disabled = false
-    }, 500);
-    return
   }
 
-  cart.push(products[btnIndex])
+
+  if(productRepeat === false){
+    cart.push({
+      id: `${productToAdd.getId()}`, 
+      quantity: productToAdd.quantity,
+      cost: productToAdd.priceCents * productToAdd.quantity, 
+      option: 0,
+      deliveryOptions : 
+      [
+        {
+          days: 7,
+          cost: 0,
+          checked: true
+        },
+        {
+          days: 5,
+          cost: convertToPercent(productToAdd.priceCents * productToAdd.quantity, 10),
+          checked: false
+        },
+        {
+          days: 1,
+          cost: convertToPercent(productToAdd.priceCents * productToAdd.quantity, 30),
+          checked: false
+        }
+      ]
+    });
+  }
+
+  // Reset product's quantity to 1
+  for(let product of products){
+    if(product.getId() === productId){
+      product.quantity = 1
+    }
+  }
+
+  localStorage.setItem('cart', JSON.stringify(cart))
+}
+
+export function removeFromCart(cartId){
+  cart.forEach( (cartItem, cartIndex) =>  {
+    if(cartItem.id === cartId){
+      cart.splice(cartIndex, 1)
+    }
+  });
+}
+
+export function cleanCart(){ 
+  cart.splice(0)
   console.log(cart)
-  
-  /* renderCart() */
-  button.disabled = true
-  setTimeout( () => {
-    button.disabled = false
-  }, 500);
 }

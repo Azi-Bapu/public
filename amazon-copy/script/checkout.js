@@ -1,74 +1,189 @@
-import { cart } from "./data/cart.js"
+import { cart, removeFromCart, cleanCart } from "./data/cart.js";
+import { orders, placeOrder } from "./data/orders.js";
+import { convertToPercent, formatCurrency, getProduct } from "./utils/utils.js";
 
-const dateFormat = ( () => {
-  const format = {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric'
-  }
-
-  return (date) => date.toLocaleDateString('en-US', format)
-})();
+let itemsCount = 0 
+let itemsCost = 0
+let deliveryFee = 0 // The total of the checked radio inputs
+let tax = 0
+let preTax = 0
+let postTax = 0
 
 document.addEventListener('DOMContentLoaded', () => {
-  renderCart()
-})
+  renderPage()
+});
 
-export function renderCart() {
-  const checkoutElement = document.getElementById('delivery__info-js')
-  const fragment = document.createDocumentFragment()
-  const today = new Date()
+function renderPage(){
+  renderOrderSummary()
+  renderPaymentSummary()
+  renderRadioValues()
+  initRemoveFromCartHandler()
+  initPlaceOrderBtnHandler()
+  initRadioHandler()
+  updateItemsCount()
+}
 
-  const arrayOfCheckoutItems = cart.map( (cartItem, cartIndex) => {
-    return (
+function renderOrderSummary(){
+  let html = ''
+  const orderSummaryElement = document.querySelector('#order-summary-js')
+
+  for(let cartItem of cart){
+    let productToAdd = getProduct(cartItem.id)
+    const optionPicked = cartItem.option
+    const dayPicked = cartItem.deliveryOptions[optionPicked].days
+   
+    html += `
+        <div class="order">
+            <h3 class="delivery__date">Delivery date: Tuesday, June ${dayPicked}</h3>
+          <section class="delivery-grid">
+            <div class="delivery__preview">
+              <div class="delivery-image__frame">
+                <img src="./${productToAdd.image}" alt="" class="delivery__image">
+              </div>
+              <div class="order__info">
+                <p class="two-line-clip item__title">${productToAdd.name}</p>
+                <p class="item__cost">$${formatCurrency(cartItem.cost)}</p>
+                <p>Quantity: ${cartItem.quantity} <span class= "nowrap"><a class="update__link" href="./index.html">Update</a> <a class="update__link delete-button-js" data-cartid= "${cartItem.id}">Delete</a></span></p>
+              </div>
+            </div>
+            <div class="delivery__options" >
+              <p class="option__title">Choose a delivery option:</p>
+              <div class="option__container">
+                <input class="radio-input radio-input-js" type="radio" name="option-${cartItem.id}" data-cartid="${cartItem.id}" data-deliveryOption= "0">
+                <label class="option" for="option-${cartItem.id}" >
+                  <span class="delivery-option__date delivery__date">Tuesday, June 21 </span>
+                  <span class="delivery-option__cost">FREE Shipping</span>
+                </label>
+              </div>
+              <div class="option__container">
+                <input class="radio-input radio-input-js" type="radio" name="option-${cartItem.id}" data-cartid="${cartItem.id}" data-deliveryOption= "1" >
+                <label class="option" for="option-${cartItem.id}" >
+                  <span class="delivery-option__date delivery__date">Wednesday, June 15</span>
+                  <span class="delivery-option__cost">$${formatCurrency(cartItem.deliveryOptions[1].cost)} - Shipping</span>
+                </label>
+              </div>
+              <div class="option__container">
+                <input class="radio-input radio-input-js" type="radio" name="option-${cartItem.id}" data-cartid="${cartItem.id}" data-deliveryOption= "2">
+                <label class="option" for="option-${cartItem.id}" >
+                  <span class="delivery-option__date delivery__date">Monday, June 13</span>
+                  <span class="delivery-option__cost">$${formatCurrency(cartItem.deliveryOptions[2].cost)} - Shipping</span>
+                </label>
+              </div>
+            </div>
+          </section>
+        </div>
       `
-        <h3 class="delivery__date">Delivery date: ${dateFormat(today)}</h3>
-        <section class="delivery-grid">
-          <div class="delivery__preview">
-            <div class="delivery-image__frame">
-              <img src="./${cartItem.image}" alt="" class="delivery__image">
-            </div>
-            <div class="order__info">
-              <p class="two-line-clip item__title">${cartItem.name}</p>
-              <p class="item__cost">$${cartItem.priceInDollars()}</p>
-              <p class= "nowrap">Quantity: ${cartItem.qty}<a class="update__link" href="">Update</a> <a class="update__link" href="">Delete</a></p>
-            </div>
-          </div>
-          <div class="delivery__options">
-            <p class="option__title">Choose a delivery option:</p>
-            <div class="option__container">
-              <input class="radio-input" type="radio" name="option-${cartIndex}">
-              <label class="option" for="option-${cartIndex}" >
-                <span class="delivery-option__date delivery__date">${dateFormat( new Date(today - (7*24*60*60*1000)) )}</span>
-                <span class="delivery-option__cost">FREE Shipping</span>
-              </label>
-            </div>
-            <div class="option__container">
-              <input class="radio-input" type="radio" name="option-${cartIndex}">
-              <label class="option" for="option-${cartIndex}" >
-                <span class="delivery-option__date delivery__date">${dateFormat( new Date(today - (3*24*60*60*1000)) )}</span>
-                <span class="delivery-option__cost">$${cartItem.priceCents / 1000} - Shipping</span>
-              </label>
-            </div>
-            <div class="option__container">
-              <input class="radio-input" type="radio" name="option-${cartIndex}">
-              <label class="option" for="option-${cartIndex}" >
-                <span class="delivery-option__date delivery__date">${dateFormat( new Date(today - (24*60*60*1000)) )}</span>
-                <span class="delivery-option__cost">$${2 * (cartItem.priceCents / 1000)} - Shipping</span>
-              </label>
-            </div>
-          </div>
-        </section>
-      `
-    ) 
-  });
+  }
 
-  arrayOfCheckoutItems.forEach( (checkoutItem) => {
-    const div = document.createElement('div')
-    div.classList.add('order')
-    div.innerHTML += checkoutItem
-    fragment.append(div)
-  });
+  orderSummaryElement.innerHTML = html
+}
 
-  checkoutElement.append(fragment)
+function renderPaymentSummary(){
+  itemsCount = 0 
+  itemsCost = 0
+  deliveryFee = 0 // The total of the checked radio inputs
+  tax = 0
+  preTax = 0
+  postTax = 0
+  
+  const paymentSummaryElement = document.querySelector('#payment-summary-js')
+
+  for(let cartItem of cart){
+    const optionPicked = cartItem.option
+    itemsCount += cartItem.quantity
+    itemsCost += cartItem.cost
+    deliveryFee += cartItem.deliveryOptions[optionPicked].cost
+  }
+
+  preTax = itemsCost + deliveryFee
+  tax = convertToPercent(preTax, 10)
+  postTax = preTax + tax
+
+  let html = `
+    <h3 class="summary__title">Order Summary</h3>
+    <p><span>Items (${itemsCount}):</span><span>$${formatCurrency(itemsCost)}</span></p>
+    <p><span>Shipping & handling:</span><span class="pre-tax-cost">$${formatCurrency(deliveryFee)}</span></p>
+    <p><span>Total before tax:</span><span>$${formatCurrency(preTax)}</span></p>
+    <p class="est-tax"><span>Estimated tax (10%):</span><span>$${formatCurrency(tax)}</span></p>
+    <p class="order-total"><span>Order total:</span><span>$${formatCurrency(postTax)}</span></p><a class= "place-order__link" ><button class="primary__btn place-order__btn place-order-btn-js">Place your order</button></a>
+    
+  `
+
+  paymentSummaryElement.innerHTML = html
+}
+
+function initRemoveFromCartHandler(){
+  const deleteLinks = document.querySelectorAll('.delete-button-js')
+  for(let link of deleteLinks){
+    link.addEventListener('click', () => {
+      const cartId = link.dataset.cartid
+      removeFromCart(cartId)
+      localStorage.setItem('cart', JSON.stringify(cart))
+      renderPage()
+    });
+  }
+}
+
+function initPlaceOrderBtnHandler(){
+  const buttonLink = document.querySelector('.place-order-btn-js')
+  buttonLink.addEventListener('click', () => {
+    if(cart.length !== 0){
+      placeOrder(postTax)
+      localStorage.setItem('orders', JSON.stringify(orders))
+      cleanCart()
+      localStorage.setItem('cart', JSON.stringify(cart))
+      renderOrderSummary()
+      renderPaymentSummary()
+      updateItemsCount()
+    }
+  });
+}
+
+function initRadioHandler(){
+  const radioElements = document.querySelectorAll('.radio-input-js')
+  for(let radio of radioElements){
+    radio.addEventListener('input', () => {
+      const cartId = radio.dataset.cartid
+      const deliveryOption = radio.dataset.deliveryoption 
+
+      for(let cartItem of cart){
+        if(cartItem.id === cartId){
+          cartItem.option = deliveryOption
+          cartItem.deliveryOptions.forEach( (option, optionIndex) => {
+            
+              if(deliveryOption == optionIndex){
+                option.checked = true
+              } else {
+                option.checked = false
+              }
+            
+          });
+        }
+        
+      }
+      renderRadioValues()
+      localStorage.setItem('cart',JSON.stringify(cart))
+      renderPage()
+    });
+  }
+}
+
+function  renderRadioValues(){
+
+  for(let cartItem of cart){
+    let index = 0
+    const radioElements = document.querySelectorAll(`input[name="option-${cartItem.id}"]`)  
+    for(let radio of radioElements){
+      radio.checked = cartItem.deliveryOptions[index].checked
+      index +=1
+    }
+    
+  }
+
+}
+
+function updateItemsCount(){
+  let count = cart.length
+  const itemsCount = document.querySelector('.item-count-js')
+  itemsCount.textContent = count
 }

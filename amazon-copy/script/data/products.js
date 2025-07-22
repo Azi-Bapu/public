@@ -5,28 +5,35 @@ class Product {
   rating
   priceCents
   keywords
-  qty
+  type
+  quantity = 1
 
-  constructor({id, image, name, rating, priceCents, keywords, qty}){
-    this.#id = id
-    this.image = image
-    this.name = name
-    this.rating = rating
-    this.priceCents = priceCents
-    this.keywords = keywords 
-    this.qty = qty || 1
+  constructor(product){
+    this.#id = product.id
+    this.image = product.image
+    this.name = product.name
+    this.rating = product.rating
+    this.priceCents = product.priceCents
+    this.keywords = product.keywords 
+    this.type = product.type ||  'Regular'
   }
 
   getId(){
     return  this.#id
   }
 
-  priceInDollars() {
-    return this.priceCents / 100
-  }
-
   ratingStarNo(){
     return this.rating.stars * 10
+  }
+
+}
+
+class Clothing extends Product {
+  sizeChartLink
+
+  constructor(product){
+    super(product)
+    this.sizeChartLink = product.sizeChartLink
   }
 
 }
@@ -45,7 +52,7 @@ const productsArray = [
       "socks",
       "sports",
       "apparel"
-    ]
+    ],
   },
   {
     id: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
@@ -693,7 +700,10 @@ const productsArray = [
 ];
 
 export const products =  productsArray.map( (product) => {
+
+  if(product.type === 'clothing'){
+    return new Clothing(product)
+  }
   return new Product(product)
+
 });
-
-
