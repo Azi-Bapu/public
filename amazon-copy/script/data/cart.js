@@ -65,6 +65,7 @@ export function removeFromCart(cartId){
 }
 
 export function cleanCart(){ 
+  localStorage.removeItem('cart')
   cart.splice(0)
   console.log(cart)
 }
