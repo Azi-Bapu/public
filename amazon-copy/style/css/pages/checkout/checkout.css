@@ -163,6 +163,10 @@
   padding-bottom: 0.5rem; /* 8px */
 }
 
+.place-order__link:hover, .place-order__link:focus{
+  outline: none;
+}
+
 .place-order__btn {
   width: 100%;
   padding-block: 0.8rem;

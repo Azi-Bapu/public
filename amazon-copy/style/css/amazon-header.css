@@ -1,4 +1,7 @@
 .amazon__header {
+  position: sticky;
+  top: 0;
+
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;

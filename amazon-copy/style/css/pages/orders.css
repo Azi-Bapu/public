@@ -74,6 +74,10 @@
   width: 8.75rem; /* 140px */
 }
 
+.buy-again-link:hover, .buy-again-link:focus{
+  outline: none;
+}
+
 .order__name {
   font-weight: 700;
 }
