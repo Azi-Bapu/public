@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function renderPage(){
   renderProducts()
+  initSearch()
   initAddToCartHandler()
   initSelectProductQtyHandler()
   updateCartCount()
@@ -90,4 +91,28 @@ function updateCartCount(){
   }
 
     cartCountElement.textContent = cartCount
+}
+
+function initSearch(){
+  const searchElement = document.querySelector('.search-bar-js')
+  searchElement.addEventListener('input', debounce(renderSearched, 250))
+}
+
+function debounce(fn, delay){
+
+  let setIndex = 0
+  return (e) => {
+    console.log(e.target.value) 
+    if(setIndex) clearTimeout(setIndex)
+    if(e.target.value.length !== 0){
+        setIndex = setTimeout(() => {
+        fn(e)
+      }, delay)
+    } 
+  }
+}
+
+function renderSearched(event){
+  //Cross checking the searched with names of the general array of Products to filter out a new array, and push the array of classes through renderProducts()
+  console.log(`${event.target.value} SENT`)
 }
