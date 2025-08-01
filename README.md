@@ -1,0 +1,2 @@
+- Amazon Copy - https://amazon-copy-ep.netlify.app/
+- Weather App - https://weather-app-epe.netlify.app/
