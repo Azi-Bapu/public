@@ -5,9 +5,9 @@ export const orders = JSON.parse(localStorage.getItem('orders')) || []
 export function placeOrder(total){
   const cartArray = cart.map( cartItem =>  {
     return  { id: cartItem.id,
-              quantity: cartItem.quantity,
-              deliveryOption: cartItem.deliveryOptions[cartItem.option] 
-            }
+      quantity: cartItem.quantity,
+      deliveryOption: cartItem.deliveryOptions[cartItem.option] 
+    }
   })
 
   orders.push({

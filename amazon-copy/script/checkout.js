@@ -135,6 +135,7 @@ function initPlaceOrderBtnHandler(){
       renderOrderSummary()
       renderPaymentSummary()
       updateItemsCount()
+      document.location.href = './ordersPage.html'
     }
   });
 }
