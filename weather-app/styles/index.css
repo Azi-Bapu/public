@@ -72,48 +72,13 @@ body {
 
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
 
   margin-bottom: 2.5rem;
 }
 
-/* Search loading states OFF */
-.hide {
-  display: none;
-}
-/* Search loading states ON */
-.show {
-  position: absolute;
-  z-index: 10;
-  top: -0.18em;
-
-  width: 100%;
-  border-radius: 1.8em;
-  padding: 0.6em 1em;
-
-  font-size: 1rem;
-
-  color: transparent;  
-  
-  animation-name: loading;
-  animation-duration: 500ms;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  
-}
-
-@keyframes loading {
-  0% {
-    background-color: #838a54;
-  }
-  100%{
-    background-color: #fe0044;
-  }
-}
-
 .search__bar {
-  position: absolute;
-  z-index: 100;
 
   width: 97.5%;
   border: none;
@@ -122,6 +87,28 @@ body {
 
   font-size: 1rem;
 }
+
+/*  Loading state*/
+.show {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 1.5em;
+  height: 1.5em;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  border-top: 3px solid #1CBBCF;
+
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
 
 
 /*HERO SECTION*/
