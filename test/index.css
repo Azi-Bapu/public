@@ -1,0 +1,33 @@
+body {
+  display: grid;
+  place-items: center;
+
+  height: 100vh;
+}
+
+.grandparent {
+  display: grid;
+  place-items: center;
+
+  width: 10rem;
+  height: 10rem;
+
+  background-color: red;
+}
+
+.parent {
+  display: grid;
+  place-items: center;
+
+  width: 6rem;
+  height: 6rem;
+
+  background-color: blue;
+}
+
+.child {
+  width: 2rem;
+  height: 2rem;
+
+  background-color: black;
+}

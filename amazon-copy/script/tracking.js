@@ -1,8 +1,5 @@
-import { cart } from "./data/cart.js"
 import { orders } from "./data/orders.js"
-import { getProduct } from "./utils/utils.js"
-
-
+import { getProduct, updateCartCount } from "./utils/utils.js"
 
 
 
@@ -16,16 +13,14 @@ function renderTrackingPage(){
   const orderId = url.searchParams.get('orderId')
   const productId = url.searchParams.get('productId')
   const cartIndex = url.searchParams.get('cartIndex')
-
-  let html = ''
-  let orderedItem
   const trackingMainPage = document.querySelector('.tracking-page-js')
   const product = getProduct(productId)
-   
+  let html = ''
+  let orderedItem
+  
   for(let order of orders){
     if(orderId === order.id) orderedItem = order 
   }
-  
 
   html += `
     <a class="view-orders__link" href="./ordersPage.html#order-${orderedItem.id}">View all orders</a>
@@ -33,7 +28,7 @@ function renderTrackingPage(){
     <p class="arrival-order">${product.name}</p>
     <p class="arrival-qty">Quantity: ${orderedItem.cartInfo[cartIndex].quantity}</p>
     <div class="arrival-image__frame">
-      <img class="arrival-image" src="./${product.image}" alt="">
+      <img class="arrival-image" src="./${product.image}" alt="${product.name} product image">
     </div>
     <div class="arrival__stages">
       <p>Preparing</p>
@@ -46,15 +41,4 @@ function renderTrackingPage(){
     </div>
   `
   trackingMainPage.innerHTML = html
-}
-
-function updateCartCount(){
-  let cartCount = 0
-  const cartCountElement = document.querySelector('.cart-count-js')
-
-  for(let cartItem of cart){
-    cartCount += cartItem.quantity
-  }
-
-    cartCountElement.textContent = cartCount
 }

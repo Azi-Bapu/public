@@ -2,25 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="author"  content="EP">
+  <meta name="description" content="A simple weather app that provides current weather information based on user input.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="./assets/Icons/Humidity.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles/index.css">
-  <script type="module" src="./script/index.js" defer></script>
+  <link rel="preconnect" href="https://api.openweathermap.org/">
+  <link rel="preconnect" href="https://api.opencagedata.com/">
+  <script type="module" src="./script/index.js"></script>
   <title>Weather</title>
 </head>
 <body>
-  <div class="card card-js">
-    <div class="notification notification-js">It's gonna rain Cats and Dogs</div>
-    <section class="search">
+  <section class="card card-js">
+    <div class="notification notification-js" role="status"> <!-- Notification --> </div>
+    <form class="search" aria-label="Location search">
       <input class="search__bar search-bar-js" type="text" placeholder="Lekki, Lagos, Nigeria" autocorrect="on" required>
-      <div id="loading-js" class="hide" aria-label="Loading"></div>
-    </section>
-    <section class="hero__section">
+      <div id="loading-js" class="loader" aria-hidden="true">W</div>
+    </form>
+    <section class="hero__section hero-section-js" role="status">
       <!-- Load by js -->
     </section>
-    <section class="weather__data">
+    <section class="weather__data weather-data-js" role="status">
       <!-- Load by js -->
     </section>
-    <div class="swipe-up" role="status"></div>
-  </div>
+    <div class="swipe-up">Swipe UP</div>
+  </section>
 </body>
 </html>

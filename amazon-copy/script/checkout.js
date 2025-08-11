@@ -17,9 +17,6 @@ function renderPage(){
   renderOrderSummary()
   renderPaymentSummary()
   renderRadioValues()
-  initRemoveFromCartHandler()
-  initPlaceOrderBtnHandler()
-  initRadioHandler()
   updateItemsCount()
 }
 
@@ -38,7 +35,7 @@ function renderOrderSummary(){
           <section class="delivery-grid">
             <div class="delivery__preview">
               <div class="delivery-image__frame">
-                <img src="./${productToAdd.image}" alt="" class="delivery__image">
+                <img src="./${productToAdd.image}" alt="${productToAdd.name} product image" class="delivery__image">
               </div>
               <div class="order__info">
                 <p class="two-line-clip item__title">${productToAdd.name}</p>
@@ -112,62 +109,44 @@ function renderPaymentSummary(){
   paymentSummaryElement.innerHTML = html
 }
 
-function initRemoveFromCartHandler(){
-  const deleteLinks = document.querySelectorAll('.delete-button-js')
-  for(let link of deleteLinks){
-    link.addEventListener('click', () => {
-      const cartId = link.dataset.cartid
-      removeFromCart(cartId)
-      localStorage.setItem('cart', JSON.stringify(cart))
-      renderPage()
-    });
+document.addEventListener('click', function(e) {
+  if (e.target.matches('.delete-button-js')) {
+    const cartId = e.target.dataset.cartid;
+    removeFromCart(cartId);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    renderPage();
   }
-}
-
-function initPlaceOrderBtnHandler(){
-  const buttonLink = document.querySelector('.place-order-btn-js')
-  buttonLink.addEventListener('click', () => {
-    if(cart.length !== 0){
-      placeOrder(postTax)
-      localStorage.setItem('orders', JSON.stringify(orders))
-      cleanCart()
-      localStorage.setItem('cart', JSON.stringify(cart))
-      renderOrderSummary()
-      renderPaymentSummary()
-      updateItemsCount()
-      document.location.href = './ordersPage.html'
+  if (e.target.matches('.place-order-btn-js')) {
+    if (cart.length !== 0) {
+      placeOrder(postTax);
+      localStorage.setItem('orders', JSON.stringify(orders));
+      cleanCart();
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderOrderSummary();
+      renderPaymentSummary();
+      updateItemsCount();
+      document.location.href = './ordersPage.html';
     }
-  });
-}
-
-function initRadioHandler(){
-  const radioElements = document.querySelectorAll('.radio-input-js')
-  for(let radio of radioElements){
-    radio.addEventListener('input', () => {
-      const cartId = radio.dataset.cartid
-      const deliveryOption = radio.dataset.deliveryoption 
-
-      for(let cartItem of cart){
-        if(cartItem.id === cartId){
-          cartItem.option = deliveryOption
-          cartItem.deliveryOptions.forEach( (option, optionIndex) => {
-            
-              if(deliveryOption == optionIndex){
-                option.checked = true
-              } else {
-                option.checked = false
-              }
-            
-          });
-        }
-        
-      }
-      renderRadioValues()
-      localStorage.setItem('cart',JSON.stringify(cart))
-      renderPage()
-    });
   }
-}
+});
+
+document.addEventListener('input', function(e) {
+  if (e.target.matches('.radio-input-js')) {
+    const cartId = e.target.dataset.cartid;
+    const deliveryOption = e.target.dataset.deliveryoption;
+    for (let cartItem of cart) {
+      if (cartItem.id === cartId) {
+        cartItem.option = deliveryOption;
+        cartItem.deliveryOptions.forEach((option, optionIndex) => {
+          option.checked = (deliveryOption == optionIndex);
+        });
+      }
+    }
+    renderRadioValues();
+    localStorage.setItem('cart', JSON.stringify(cart));
+    renderPage();
+  }
+});
 
 function  renderRadioValues(){
 

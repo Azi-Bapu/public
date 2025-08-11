@@ -1,6 +1,5 @@
 import { orders } from "./data/orders.js";
-import { formatCurrency, getProduct } from "./utils/utils.js";
-import { cart } from "./data/cart.js";
+import { formatCurrency, getProduct, updateCartCount } from "./utils/utils.js";
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -8,13 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCartCount()
 })
 
-function renderOrders(){
+function renderOrders() {
   const ordersPageElement = document.querySelector('.order__page')
+  let html = ''
 
   for(let order of orders){
     let htmlHead = ''
     let htmlMain = ''
-
 
     htmlHead += `
       <div id="order-${order.id}" class="date-cost-id">
@@ -29,47 +28,26 @@ function renderOrders(){
         </p>
       </div>
     `
-    order.cartInfo.forEach((cart, cartIndex) => {
-
-      let productToAdd = getProduct(cart.id)
-      htmlMain += `
+    const htmlMainArray = order.cartInfo.map((cart, cartIndex) => {
+      let productToAdd = getProduct(cart.id);
+      return `
         <div class="product">
-          <img class="product__image" src="./${productToAdd.image}" alt="">
+          <img class="product__image" src="./${productToAdd.image}" alt="${productToAdd.name} product image">
           <div class="product__info">
             <div>
               <p class="order__name">${productToAdd.name}</p>
               <p class="order__time nowrap">Arriving on: August ${cart.deliveryOption.days}</p>
-              <p class="order__quantity nowrap">Quantity: ${cart.quantity}</p><a class= "buy-again-link" href= "./index.html"><button class="buy-again primary__btn">Buy it again</button></a>
+              <p class="order__quantity nowrap">Quantity: ${cart.quantity}</p><a class="buy-again-link" href="./index.html"><button class="buy-again primary__btn">Buy it again</button></a>
             </div>
             <div>
               <a class="track-package secondary__btn" href="./tracking.html?orderId=${order.id}&productId=${cart.id}&cartIndex=${cartIndex}">Track package</a>
             </div>
           </div>
         </div>
-      `
-      }
-    );
-    
-    
-
-    const section = document.createElement('section')
-    section.classList.add('order__details')
-    section.innerHTML = `${htmlHead}<div class= "products">${htmlMain}</div>`
-
-    ordersPageElement.append(section)
-
-    
+      `;
+    });
+    htmlMain = htmlMainArray.join('');
+    html += `<section class="order__details">${htmlHead}<div class="products">${htmlMain}</div></section>`;
   }
-    
-}
-
-function updateCartCount(){
-  let cartCount = 0
-  const cartCountElement = document.querySelector('.cart-count-js')
-
-  for(let cartItem of cart){
-    cartCount += cartItem.quantity
-  }
-
-    cartCountElement.textContent = cartCount
+  ordersPageElement.innerHTML = `<h1 class="page__title">Your Orders</h1>${html}`;
 }

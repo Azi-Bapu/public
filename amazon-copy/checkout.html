@@ -4,12 +4,6 @@
     <title>Checkout Copy</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--  
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="icon" href="./images/amazon-mobile-logo-white.png">
-    -->
     <link rel="icon" href="./images/amazon-mobile-logo-white.png">
     <link rel="stylesheet" href="./style/css/global.css">
     <link rel="stylesheet" href="./style/css/pages/checkout/checkout-header.css">
@@ -20,105 +14,22 @@
   <body>
     <header class="checkout__header">
       <a href="./index.html" class="logo__frame">
-        <img class="logo__icon-large" src="./images/amazon-logo.png" alt="">
-        <img class="logo__icon-small" src="./images/amazon-mobile-logo.png" alt="">
+        <img class="logo__icon-large" src="./images/amazon-logo.png" alt="Amazon main logo" width="194" height="60">
+        <img class="logo__icon-small" src="./images/amazon-mobile-logo.png" alt="Amazon mobile logo" width="189" height="194">
       </a>
       <h1 class="checkout-header__title nowrap">Checkout (<a class="item-count" href="./index.html"><span class="item-count-js"></span> items</a>)</h1>
       <div class="lock-icon__frame">
-        <img class="lock__icon" src="./images/icons/checkout-lock-icon.png" alt="">
+        <img class="lock__icon" src="./images/icons/checkout-lock-icon.png" alt="Checkout lock icon">
       </div>
     </header>
     <main class="checkout__main">
       <h2 class="checkout-main__title">Review your order</h2>
       <section class="checkout__info">
         <section id="order-summary-js" class="delivery__info">
-           <!-- <div class="order">
-            <h3 class="delivery__date">Delivery date: Tuesday, June 21</h3>
-          <section class="delivery-grid">
-            <div class="delivery__preview">
-              <div class="delivery-image__frame">
-                <img src="./images/products/vanity-mirror-silver.jpg" alt="" class="delivery__image">
-              </div>
-              <div class="order__info">
-                <p class="two-line-clip item__title">Black and Gray Athletic Cotton Socks - 6 Pairs </p>
-                <p class="item__cost">$10.90</p>
-                <p>Quantity: 2 <a class="update__link" href="">Update</a> <a class="update__link" href="">Delete</a></p>
-              </div>
-            </div>
-            <div class="delivery__options">
-              <p class="option__title">Choose a delivery option:</p>
-              <div class="option__container">
-                <input class="radio-input" type="radio" name="option-1">
-                <label class="option" for="option-1" >
-                  <span class="delivery-option__date delivery__date">Tuesday, June 21 </span>
-                  <span class="delivery-option__cost">FREE Shipping</span>
-                </label>
-              </div>
-              <div class="option__container">
-                <input class="radio-input" type="radio" name="option-1">
-                <label class="option" for="option-1" >
-                  <span class="delivery-option__date delivery__date">Wednesday, June 15</span>
-                  <span class="delivery-option__cost">$4.99 - Shipping</span>
-                </label>
-              </div>
-              <div class="option__container">
-                <input class="radio-input" type="radio" name="option-1">
-                <label class="option" for="option-1" >
-                  <span class="delivery-option__date delivery__date">Monday, June 13</span>
-                  <span class="delivery-option__cost">$9.99 - Shipping</span>
-                </label>
-              </div>
-            </div>
-          </section>
-          </div>
-          <div class="order">
-            <h3 class="delivery__date">Delivery date: Tuesday, June 21</h3>
-          <section class="delivery-grid">
-            <div class="delivery__preview">
-              <div class="delivery-image__frame">
-                <img src="./images/products/6-piece-non-stick-baking-set.webp" alt="" class="delivery__image">
-              </div>
-              <div class="order__info">
-                <p class="two-line-clip item__title">Black and Gray Athletic Cotton Socks - 6 Pairs </p>
-                <p class="item__cost">$10.90</p>
-                <p>Quantity: 2 <a class="update__link" href="">Update</a> <a class="update__link" href="">Delete</a></p>
-              </div>
-            </div>
-            <div class="delivery__options">
-              <p class="option__title">Choose a delivery option:</p>
-              <div class="option__container">
-                <input class="radio-input" type="radio" name="option-2">
-                <label class="option" for="option-2" >
-                  <span class="delivery-option__date delivery__date">Tuesday, June 21 </span>
-                  <span class="delivery-option__cost">FREE Shipping</span>
-                </label>
-              </div>
-              <div class="option__container">
-                <input class="radio-input" type="radio" name="option-2">
-                <label class="option" for="option-2" >
-                  <span class="delivery-option__date delivery__date">Wednesday, June 15</span>
-                  <span class="delivery-option__cost">$4.99 - Shipping</span>
-                </label>
-              </div>
-              <div class="option__container">
-                <input class="radio-input" type="radio" name="option-2">
-                <label class="option" for="option-2" >
-                  <span class="delivery-option__date delivery__date">Monday, June 13</span>
-                  <span class="delivery-option__cost">$9.99 - Shipping</span>
-                </label>
-              </div>
-            </div>
-          </section>
-          </div> -->
+          <!-- Rendering with js -->
         </section>
         <section id="payment-summary-js" class="order__summary">
-          <!-- <h3 class="summary__title">Order Summary</h3>
-          <p><span>Items (3):</span><span>$42.75</span></p>
-          <p><span>Shipping & handling:</span><span class="pre-tax-cost">$4.99</span></p>
-          <p><span>Total before tax:</span><span>$47.74</span></p>
-          <p class="est-tax"><span>Estimated tax (10%):</span><span>$4.77</span></p>
-          <p class="order-total"><span>Order total:</span><span>$52.51</span></p>
-          <button class="primary__btn place-order__btn">Place your order</button> -->
+          <!-- Rendering with js -->
         </section>
       </section>
     </main>

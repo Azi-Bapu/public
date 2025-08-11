@@ -1,4 +1,4 @@
-import { kilometerPerHour, pushNotification, loadingState } from "./utils.js";
+import { kilometerPerHour, pushNotification } from "./utils.js";
 
 
 //API keys would be move to environment variables.
@@ -11,23 +11,30 @@ const openCage = {
   url: 'https://api.opencagedata.com/geocode/v1/json?'
 };
 
-// Main entry point
-document.addEventListener('DOMContentLoaded', async () => {
-  initAutoSearch();
-  initNotificationObserver();
-  await renderByUserLocation();
-});
 
-// Initialize search bar with debounce
-function initAutoSearch() {
-  const searchBarElement = document.querySelector('.search-bar-js');
-  searchBarElement.value = '';
-  searchBarElement.addEventListener('input', debounce(getData, 1000));
-}
+// DOM elements
+const searchBarElement = document.querySelector('.search-bar-js');
+const heroSectionElement = document.querySelector('.hero-section-js');
+const weatherDataElement = document.querySelector('.weather-data-js');
+const swipeElement = document.querySelector('.swipe-up');
+const loadingDiv = document.getElementById('loading-js');
+const notificationElement = document.querySelector('.notification-js');
+
+// Initial load
+searchBarElement.value = '';
+searchBarElement.addEventListener('input', debounce(getData, 1000));
+initNotificationObserver();
+/* initDataObserver(); */
+(async () => {
+  // Render weather data of user's location on initial load
+  await renderByUserLocation(); 
+})();
+
 
 // Debounce for input events
 function debounce(fn, delay) {
-  let setIndex = 0;
+  let setIndex = null;
+  
   return (e) => {
     if (setIndex) clearTimeout(setIndex);
     if (e.target.value.length !== 0) {
@@ -40,9 +47,10 @@ function debounce(fn, delay) {
           }
         } catch (error) {
           pushNotification('Error searching location.');
-          console.error('Error in debounce function:', error);
         } finally {
           hideLoadingSpinner();
+          clearInterval(setIndex); // Clear timeout to prevent memory leaks
+          setIndex = null;
         }
       }, delay);
     } else {
@@ -52,29 +60,46 @@ function debounce(fn, delay) {
   };
 }
 
-async function getData(coordinate) {
-  if (!coordinate || !coordinate.latitude || !coordinate.longitude) {
-    pushNotification(`Invalid coordinate provided. Try again.`);
-    return;
-  }
-  console.log('Sent API Request to Open Weather');
-  try {
-    const response = await fetch(`${openWeather.url}lat=${coordinate.latitude}&lon=${coordinate.longitude}&appid=${openWeather.key}&units=metric`);
-    if (!response.ok) {
-      throw new Error('Weather API response not ok');
-    }
-    const jsonResponse = await response.json();
-    if (!jsonResponse || !jsonResponse.weather || !jsonResponse.main || !jsonResponse.wind || !jsonResponse.sys) {
-      pushNotification('Incomplete weather data received.');
-      return;
-    }
-    renderData(jsonResponse);
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    pushNotification('Unable to fetch weather data. Try again later.');
-  }
-}
 
+// Initialize notification and lazy loading observers
+function initNotificationObserver() {
+  const observer = new MutationObserver((mutationList) => {
+    if(mutationList.length){
+      /* console.log(mutationList) */
+      notification()
+    }
+  })
+  observer.observe(notificationElement, {
+    characterData: true,
+    childList: true,
+  });
+}
+/* function initDataObserver() {
+  const observer = new MutationObserver((mutationList) => {
+    if(mutationList.length){
+      lazyloading()
+    }
+  })
+  observer.observe(weatherDataElement, {
+    childList: true,
+  });
+} 
+const lazyloading = (() => {
+  let timeOut = 0;
+  return () => {
+    clearTimeout(timeOut);
+    weatherDataElement.style.opacity = '1'
+    heroSectionElement.style.opacity = '1'
+    timeOut = setTimeout(() => {
+      weatherDataElement.style.opacity = '1'
+      heroSectionElement.style.opacity = '1'
+      timeOut = null;
+    }, 500);
+  };
+})();  */
+
+
+// Page Rendering
 function renderData(data) {
   // Cross-check required data
   if (!data || !data.weather || !data.main || !data.wind || !data.sys) {
@@ -87,41 +112,82 @@ function renderData(data) {
   const { speed: wind_speed } = wind;
   const { country } = sys;
 
-  // Show weather description 
   pushNotification(description);
 
-  // HERO SECTION 
-  const heroSectionElement = document.querySelector('.hero__section');
-  heroSectionElement.innerHTML = `
-    <img class="hero__icon hero-icon-js" src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="${description}" width="200" height="200" aria-label="Weather icon: ${description}">
-    <h1 class="temperature temperature-js" role="status"><span class="temp-value-js">${temp}</span>&deg;c</h1>
-    <h2 class="location location-js" role="status">${name}, ${country}</h2>
-  `;
+  // HERO SECTION with fade-in
+  if (heroSectionElement) {
+    heroSectionElement.innerHTML = `
+      <img class="hero__icon hero-icon-js" src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="${description}" width="200" height="200" aria-label="Weather icon: ${description}" loading="lazy">
+      <h1 class="temperature temperature-js" role="status"><span class="temp-value-js">${temp}</span>&deg;c</h1>
+      <h2 class="location location-js" role="status">${name}, ${country}</h2>
+    `;
+  }
 
-  // WEATHER DATA 
-  const weatherDataElement = document.querySelector('.weather__data');
-  weatherDataElement.innerHTML = `
-    <div class="data__col humidity">
-      <img class="data__icon humidity-icon-js" src="./assets/Icons/Humidity.svg" alt="Humidity" width="60" height="60">
-      <div class="data">
-        <p class="data__value" role="status"><span class="humidity-value-js">${humidity}</span>%</p>
-        <h3 class="data__title humidity-title-js">Humidity</h3>
+  // WEATHER DATA with fade-in
+  if (weatherDataElement) {
+    weatherDataElement.innerHTML = `
+      <div class="data__col humidity" aria-label="Humidity data">
+        <img class="data__icon humidity-icon-js" src="./assets/Icons/Humidity.svg" alt="Humidity" width="60" height="60" loading="lazy">
+        <div class="data" role="status">
+          <p class="data__value"><span class="humidity-value-js">${humidity}</span>%</p>
+          <h3 class="data__title humidity-title-js">Humidity</h3>
+        </div>
       </div>
-    </div>
-    <div class="data__col data2">
-      <img class="data__icon wind-icon-js" src="./assets/Icons/Wind thin.svg" alt="Wind speed" width="60" height="60">
-      <div class="data">
-        <p class="data__value" role="status"><span class="wind-value-js">${kilometerPerHour(wind_speed)}</span>km/h</p>
-        <h3 class="data__title wind-title-js">Wind Speed</h3>
+      <div class="data__col data2" aria-label="Wind speed data">
+        <img class="data__icon wind-icon-js" src="./assets/Icons/Wind thin.svg" alt="Wind speed" width="60" height="60" loading="lazy">
+        <div class="data" role="status">
+          <p class="data__value"><span class="wind-value-js">${kilometerPerHour(wind_speed)}</span>km/h</p>
+          <h3 class="data__title wind-title-js">Wind Speed</h3>
+        </div>
       </div>
-    </div>
-  `;
+    `;
+  }
 
   // Swipe UP 
-  const swipeElement = document.querySelector('.swipe-up');
-  swipeElement.textContent = `Swipe UP`;
+  if (swipeElement) {
+    swipeElement.style.opacity = `1`;
+  }
+
+}
+async function renderByUserLocation() {
+  pushNotification("Fetching user's location...");
+  try {
+    searchBarElement.disabled = true; 
+    showLoadingSpinner();
+    const position = await getUserLocation();
+    const { latitude, longitude } = position.coords;
+    await getData({ latitude, longitude });
+  } catch (error) {
+    pushNotification('Unable to fetch user location.');
+  } finally {
+    hideLoadingSpinner();
+    searchBarElement.disabled = false;
+  }
+}
+async function getData(coordinate) {
+  if (!coordinate || !coordinate.latitude || !coordinate.longitude) {
+    pushNotification('Invalid coordinate provided. Try again.');
+    return;
+  }
+  try {
+    const response = await fetch(`${openWeather.url}lat=${coordinate.latitude}&lon=${coordinate.longitude}&appid=${openWeather.key}&units=metric`);
+    if (!response.ok) {
+      throw new Error('Weather API response not ok');
+    }
+    const jsonResponse = await response.json();
+    if (!jsonResponse || !jsonResponse.weather || !jsonResponse.main || !jsonResponse.wind || !jsonResponse.sys) {
+      pushNotification('Incomplete weather data received.');
+      return;
+    }
+
+    renderData(jsonResponse);
+  } catch (error) {
+    pushNotification('Unable to fetch weather data. Try again later.');
+  }
 }
 
+
+// Utility
 function getUserLocation() {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
@@ -131,10 +197,8 @@ function getUserLocation() {
     }
   });
 }
-
 async function textToCoordinate(address) {
   if (!address) return null;
-  console.log('Sent API Request to convert text to coordinate');
   try {
     const response = await fetch(`${openCage.url}q=${encodeURIComponent(address)}&key=${openCage.key}&limit=1&countrycode=ng`);
     if (!response.ok) {
@@ -145,76 +209,37 @@ async function textToCoordinate(address) {
       const { lat: latitude, lng: longitude } = data.results[0].geometry;
       return { latitude, longitude };
     } else {
-      pushNotification("No results found.");
+      pushNotification('No results found.');
       return null;
     }
   } catch (error) {
-    console.error('Error converting text: ', error);
-    pushNotification("Cannot find input location. Try again.");
+    pushNotification('Cannot find input location. Try again.');
     return null;
   }
 }
 
-async function renderByUserLocation() {
-  pushNotification("Fetching user's location...");
-  try {
-    showLoadingSpinner();
-    const position = await getUserLocation();
-    const { latitude, longitude } = position.coords;
-    await getData({ latitude, longitude });
-  } catch (error) {
-    console.error('Error fetching user location:', error);
-    pushNotification(`Unable to fetch user location.`);
-  } finally {
-    hideLoadingSpinner();
-  }
-}
 
-// loading spinner
+// Loader and Notification Animation 
 function showLoadingSpinner() {
-  const loadingDiv = document.getElementById('loading-js');
-  if (loadingDiv) {
-    loadingDiv.className = 'show';
-    loadingDiv.innerHTML = 'W';
-  }
+  loadingDiv.style.opacity =  '1';
 }
-
 function hideLoadingSpinner() {
-  const loadingDiv = document.getElementById('loading-js');
-  if (loadingDiv) {
-    loadingDiv.className = 'hide';
-    loadingDiv.innerHTML = '';
-  }
+  loadingDiv.style.opacity = '0';
 }
-
-function initNotificationObserver() {
-  const targetNode = document.querySelector('.notification-js');
-  const observer = new MutationObserver((mutationsList) => {
-    for (const mutation of mutationsList) {
-      if (
-        mutation.type === 'characterData' ||
-        (mutation.type === 'childList' && mutation.target === targetNode)
-      ) {
-        notification();
-      }
-    }
-  });
-  observer.observe(targetNode, {
-    characterData: true,
-    childList: true,
-    subtree: true,
-  });
-}
-
-// Animate notification pop-down
 const notification = (() => {
   let timeOut = 0;
   return () => {
-    const notificationElement = document.querySelector('.notification-js');
     clearTimeout(timeOut);
-    notificationElement.classList.add('notification-down');
+    notificationElement.style = 'transform: translateY(1.7rem); opacity: 1;';
     timeOut = setTimeout(() => {
-      notificationElement.classList.remove('notification-down');
-    }, 5000);
+      notificationElement.style = 'transform: translateY(-2rem); opacity: 0;';
+      timeOut = null;
+    }, 3000);
   };
 })();
+
+
+
+
+
+

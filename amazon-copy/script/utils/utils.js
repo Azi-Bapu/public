@@ -1,4 +1,5 @@
 import { products } from "../data/products.js"
+import { cart } from "../data/cart.js"
 
 export function convertToPercent(number, percentage){
   return (number * percentage ) / 100
@@ -15,4 +16,16 @@ export function getProduct(productId){
         return product
       }
     }
+}
+
+// Update Cart Count 
+export function updateCartCount(){
+  let cartCount = 0
+  const cartCountElement = document.querySelector('.cart-count-js')
+
+  for(let cartItem of cart){
+    cartCount += cartItem.quantity
+  }
+
+    cartCountElement.textContent = cartCount
 }
